@@ -43,7 +43,7 @@ def index():
 	if q:
 		posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q))
 	else:
-		posts = Post.query.all()
+		posts = Post.query.order_by(Post.created.desc())
 	return render_template('posts/index.html', posts = posts)
 
 

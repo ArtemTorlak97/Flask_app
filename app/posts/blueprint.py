@@ -40,11 +40,24 @@ def index():
 	# request is a standart Flask method
 	# q contains either name of search or ''
 	q = request.args.get('q')
+
+	page = request.args.get('page')
+
+	if page and page.isdigit():
+		page = int(page)
+	else:
+		page = 1
+
 	if q:
 		posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q))
 	else:
 		posts = Post.query.order_by(Post.created.desc())
-	return render_template('posts/index.html', posts = posts)
+	
+	# page - number of page 
+	# per_page number of pages on every page
+	pages = posts.paginate(page = page, per_page = 2)
+
+	return render_template('posts/index.html', pages = pages)
 
 
 # http://localhost/blog/First-post

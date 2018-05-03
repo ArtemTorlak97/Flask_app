@@ -2,10 +2,37 @@ from flask import Blueprint
 from flask import render_template
 
 from models import Post, Tag
-
+# . because this directory
+from .forms import PostForm
 from flask import request
+from app import db
+
+# to redirect user after creating post to main blog page
+from flask import redirect
+from flask import url_for
 
 posts = Blueprint('posts', __name__, template_folder = 'templates' )
+
+# http://localhost/blog/create
+# order of location methods matters
+@posts.route('/create', methods = ['POST', 'GET'])
+def create_post():
+
+	if request.method == 'POST':
+		title = request.form['title']
+		body = request.form['body']
+
+		try:
+			post = Post(title = title, body = body)
+			db.session.add(post)
+			db.session.commit()
+		except:
+			print("ERROR!")
+
+		return 	redirect(url_for('posts.index'))	
+	form = PostForm()
+	return render_template('posts/create_post.html', form = form)
+
 
 @posts.route('/')
 def index():

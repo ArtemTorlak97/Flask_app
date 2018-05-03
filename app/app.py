@@ -1,9 +1,18 @@
 #!/usr/bin/python3.5
+import sys
 from flask import Flask
 from config import Configuration
-#import value posts (object of class blueprint)
-from posts.blueprint import posts
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__) 
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+#import value posts (object of class blueprint)
+
+app = Flask(__name__)
 app.config.from_object(Configuration)
-app.register_blueprint(posts, url_prefix='/blog')
+
+db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)

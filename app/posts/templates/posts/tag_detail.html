@@ -1,25 +1,19 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	Index page
+	{{ tag.name }} posts
 {% endblock %}
-
 
 {% block content_title %}
-<H2>
-	Posts
-</H2>
+	Posts for "{{ tag.name }}" tag:
 {% endblock %}
-
 
 {% block my_content %}
 	{% for post in posts %}
-		<p>
-			<a href="{{ url_for('posts.post_detail', slug = post.slug) }}"> {{post.title}}</a>
-		</p>	
-	
+		<div class = "post">
+			<a href = "{{url_for('posts.post_detail', slug = post.slug)}}">{{post.title}}</a>
+		</div>
 	{%endfor%}
 
 {% endblock %}
-
 

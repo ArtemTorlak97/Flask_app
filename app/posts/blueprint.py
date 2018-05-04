@@ -11,11 +11,15 @@ from app import db
 from flask import redirect
 from flask import url_for
 
+# to shadow users from admin menu
+from flask_security import login_required
+
 posts = Blueprint('posts', __name__, template_folder = 'templates' )
 
 # http://localhost/blog/create
 # order of location methods matters
 @posts.route('/create', methods = ['POST', 'GET'])
+@login_required
 def create_post():
 
 	if request.method == 'POST':
@@ -36,6 +40,7 @@ def create_post():
 
 
 @posts.route('/<slug>/edit/', methods =['POST', 'GET'])
+@login_required
 def edit_post(slug):
 	post = Post.query.filter(Post.slug == slug).first()
 

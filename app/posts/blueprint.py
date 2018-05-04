@@ -34,6 +34,25 @@ def create_post():
 	return render_template('posts/create_post.html', form = form)
 
 
+
+@posts.route('/<slug>/edit/', methods =['POST', 'GET'])
+def edit_post(slug):
+	post = Post.query.filter(Post.slug == slug).first()
+
+	if request.method == 'POST':
+		# get data from post
+		form = PostForm(formdata = request.form, obj = post)
+		# rewrite data in post
+		form.populate_obj(post)
+		# save to database
+		db.session.commit()
+
+		return redirect(utl_for('posts.post_detail', slug = post.slug))
+
+	form = PostForm(obj = post)
+	return render_template('posts/edit_post.html', post=post, form=form)
+
+
 @posts.route('/')
 def index():
 	# when we push button search , the name of our search puts to var q.
@@ -55,7 +74,7 @@ def index():
 	
 	# page - number of page 
 	# per_page number of pages on every page
-	pages = posts.paginate(page = page, per_page = 2)
+	pages = posts.paginate(page=page, per_page=6)
 
 	return render_template('posts/index.html', pages = pages)
 

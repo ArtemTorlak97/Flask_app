@@ -33,13 +33,27 @@
             <a class="nav-link" href = "/admin">Admin</a>
           {% endif %}
         </li>
+      </li>
 
-      </li>
-  
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-  
+      <li class="nav-item active">
+        <li>
+        {% if not (current_user.has_role('admin') or current_user.has_role('user')) %} 
+          <a class="btn btn-default navbar-btn" href="/login">Sign in</a>
+         {% endif %}
+         </li>
+       </li>
+
+      <li class="nav-item active">
+        <li>
+          {% if current_user.has_role('admin')  %} 
+              <a class="btn btn-default navbar-btn" href="/logout">Log out</a>
+          {% endif %}
+          {% if current_user.has_role('user')  %} 
+              <a class="btn btn-default navbar-btn" href="/logout">Log out</a>
+          {% endif %}
+         </li>
+       </li>
+
     </ul>
     
     

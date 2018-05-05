@@ -8,6 +8,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 # import value posts (object of class blueprint)
 from flask_admin import Admin
+from flask_admin import AdminIndexView
 # import forms for admin
 from flask_admin.contrib.sqla import ModelView
 from flask_security import SQLAlchemyUserDatastore
@@ -30,17 +31,35 @@ manager.add_command('db', MigrateCommand)
 #ADMIN TOOLS#
 from models import *
 
-class AdminView(ModelView):
+class AdminMixin:
 	def is_accessible(self):
 		return current_user.has_role('admin')
 
-	def inaccesible_callback(self, **kwargs):
+	def inaccesible_callback(self, name, **kwargs):
 		return redirect(url_for('security.login', next = request.url))
 
+# when we change our post slug will generate automatically
+class BaseModelView(ModelView):
+	def on_model_change(self, form, model, is_created):
+		model.generate_slug()
+		return super(BaseModelView, self).on_model_change(form, model, is_created)
 
-admin = Admin(app)
-admin.add_view(ModelView(Post, db.session))
-admin.add_view(ModelView(Tag, db.session))
+
+class AdminView(AdminMixin, ModelView):
+	pass
+
+class HomeAdminView(AdminIndexView):
+	pass
+
+class PostAdminView(AdminMixin, BaseModelView):
+	form_columns = ['title', 'body', 'tags']
+
+class TagAdminView(AdminMixin, BaseModelView):
+	form_columns = ['name', 'posts']
+
+admin = Admin(app, 'FlaskApp', url ='/', index_view = HomeAdminView(name = 'Home'))
+admin.add_view(PostAdminView(Post, db.session))
+admin.add_view(TagAdminView(Tag, db.session))
 
 
 ### Flask - security

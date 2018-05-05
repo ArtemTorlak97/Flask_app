@@ -8,12 +8,32 @@
 
 
 {% block content_title %}
-	Index page
+	Flask
 {% endblock %}
 
 
         <h2>
             {% block my_content %}
-            	smth
+            	<main>Flask is a micro web framework written in Python and based on the Werkzeug toolkit and Jinja2 template engine. It is BSD licensed.
+
+            	<p>The latest stable version of Flask is 1.0 as of April 2018. Applications that use the Flask framework include Pinterest, LinkedIn, and the community web page for Flask itself.<p>
+
+            	<p>Flask is called a micro framework because it does not require particular tools or libraries. It has no database abstraction layer, form validation, or any other components where pre-existing third-party libraries provide common functions. However, Flask supports extensions that can add application features as if they were implemented in Flask itself. Extensions exist for object-relational mappers, form validation, upload handling, various open authentication technologies and several common framework related tools. Extensions are updated far more regularly than the core Flask program.</p>
+
+            	<h1>
+            		History
+            	</h1>
+
+       
+            		<p>In 2004, Pocoo was formed as an international group of Python enthusiasts.
+					Flask was created by Armin Ronacher of Pocoo:</p>
+
+					<p>"It came out of an April Fool's joke but proved popular enough to make into a serious application in its own right."</p>
+
+					Flask is based on the Werkzeug WSGI toolkit and Jinja2 template engine, both of them Pocoo projects that were created[when?] when Ronacher and Georg Brandl were building a bulletin board system written in Python.
+
+					Despite the lack of a major release, Flask has become extremely popular among Python enthusiasts. As of mid 2016, it was the most popular Python web development framework on GitHub.
+       
+            	</main>
             {% endblock %}
         </h2>

@@ -4,6 +4,8 @@ show tables
 select * from "table_name" - to view all in table
 show columns from "table_name"
 
+DELETE FROM user WHERE email='artem-972007@mail.ru';
+
 ####migration
 python3 manage.py db migrate
 

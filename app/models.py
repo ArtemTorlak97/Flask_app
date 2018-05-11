@@ -78,7 +78,13 @@ class User(db.Model, UserMixin):
 	email = db.Column(db.String(100), unique = True)
 	password = db.Column(db.String(255))
 	active = db.Column(db.Boolean())
+	confirmed = db.Column(db.Boolean, nullable=False, default=False)
 	roles = db.relationship('Role', secondary = roles_users, backref = db.backref('users', lazy='dynamic'))
+
+	def __init__(sefl, email, password):
+		self.roles = "user"
+		self.email = email
+		self.password = password
 
 class Role(db.Model, RoleMixin):
 	id = db.Column(db.Integer(), primary_key = True)

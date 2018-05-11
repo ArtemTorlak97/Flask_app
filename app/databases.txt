@@ -4,6 +4,9 @@ show tables
 select * from "table_name" - to view all in table
 show columns from "table_name"
 
+####migration
+python3 manage.py db migrate
+
 from app import db
 ##############(documentation)
 from app import user_datastore
@@ -29,3 +32,12 @@ role = role.first()
 ####################Communicate role with user##############
 user_datastore.add_role_to_user(user,role)
 db.session.commit()
+
+
+###add new column to database 
+ALTER TABLE user ADD confirmed BOOLEAN NOT NULL;
+###update data in database
+update user set confirmed=1 where id=2
+
+##########
+email="artem-972007@mail.ru",password="1234"

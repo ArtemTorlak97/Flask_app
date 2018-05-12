@@ -3,7 +3,7 @@ from itsdangerous import URLSafeTimedSerializer
 
 ### generate key
 def generate_confirmation_token(email):
-    serializer = URLSafeTimedSerializer('MY_SECRET')
+    serializer = URLSafeTimedSerializer('SECRET_KEY')
     return serializer.dumps(email, salt='SECURITY_PASSWORD_SALT')
 
 

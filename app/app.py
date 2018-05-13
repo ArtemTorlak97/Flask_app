@@ -81,8 +81,8 @@ admin = Admin(app, 'FlaskApp', url ='/', index_view = HomeAdminView(name = 'Home
 admin.add_view(PostAdminView(Post, db.session))
 admin.add_view(TagAdminView(Tag, db.session))
 
-
 ### Flask - security
+
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
@@ -93,9 +93,6 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
     user = User(request.form['email'] , request.form['password'])
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    print(user.email)
-
     role = Role.query.filter(Role.name == 'user')
     role = role.first()
     user_datastore.add_role_to_user(user,role)
@@ -110,8 +107,8 @@ def register():
     send_email(request.form['email'], subject, html)
     #login_user(user)
     flash('A confirmation email has been sent via email.', 'success')
-    ###confirm_email(token)
-    return redirect(url_for('index'))
+    confirm_email(token)
+    return redirect(url_for('unconfirmed'))
 
 @app.route('/confirm/<token>')
 @login_required
@@ -122,11 +119,6 @@ def confirm_email(token):
     except:
         flash('The confirmation link is invalid or has expired.', 'danger')
     user = User.query.filter_by(email=email).first_or_404()
-    print(user)
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    print(user.confirmed)
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
     else:
@@ -136,4 +128,11 @@ def confirm_email(token):
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('index'))
 
- 
+@app.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    if current_user.confirmed:
+        return redirect(url_for('index'))
+    flash('Please confirm your account!', 'warning')
+    return render_template('unconf.html')
+

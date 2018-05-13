@@ -5,21 +5,36 @@ from models import Post, Tag
 # . because this directory
 from .forms import PostForm
 from flask import request
-from app import db
+from app import db, unconfirmed
 
 # to redirect user after creating post to main blog page
 from flask import redirect
 from flask import url_for
+from flask import flash
 
 # to shadow users from admin menu
 from flask_security import login_required
+from flask_security import current_user
+from functools import wraps
 
 posts = Blueprint('posts', __name__, template_folder = 'templates' )
 
 # http://localhost/blog/create
 # order of location methods matters
+
+def check_confirmed(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.confirmed is False:
+            flash('Please confirm your account!', 'warning')
+            return redirect(url_for('unconfirmed'))
+        return func(*args, **kwargs)
+
+    return decorated_function
+
 @posts.route('/create', methods = ['POST', 'GET'])
 @login_required
+@check_confirmed
 def create_post():
 
 	if request.method == 'POST':
@@ -41,6 +56,7 @@ def create_post():
 
 @posts.route('/<slug>/edit/', methods =['POST', 'GET'])
 @login_required
+@check_confirmed
 def edit_post(slug):
 	post = Post.query.filter(Post.slug == slug).first()
 
@@ -59,6 +75,8 @@ def edit_post(slug):
 
 
 @posts.route('/')
+@login_required
+@check_confirmed
 def index():
 	# when we push button search , the name of our search puts to var q.
 	# request is a standart Flask method
@@ -89,6 +107,8 @@ def index():
 # the first - post is take to function post_detail and Post.slug search in slugs first-post
 # in post we have refernce to determined class object
 @posts.route('/<slug>')
+@login_required
+@check_confirmed
 def post_detail(slug):
 	post = Post.query.filter(Post.slug == slug).first()
 	tags = post.tags
@@ -98,6 +118,8 @@ def post_detail(slug):
 # http://localhost/blog/tag/python
 # slug in tag_detail is python
 @posts.route('/tag/<slug>')
+@login_required
+@check_confirmed
 def tag_detail(slug):
 	tag = Tag.query.filter(Tag.slug == slug).first()
 	posts = tag.posts.all()

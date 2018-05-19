@@ -7,6 +7,12 @@ class Configuration(object):
 	SECRET_KEY = 'MY_SECRET'
 	SECURITY_PASSWORD_SALT = 'salt'
 	SECURITY_PASSWORD_HASH = 'sha512_crypt'
+
+	SECURITY_LOGIN_URL='/login'
+	SECURITY_LOGOUT_URL='/logout'
+	SECURITY_LOGIN_USER_TEMPLATE = "login.html"
+	SECURITY_POST_LOGIN_VIEW = "/"
+	
 	MAIL_SERVER = 'smtp.googlemail.com'
 	MAIL_PORT = 465
 	MAIL_USE_TLS = False

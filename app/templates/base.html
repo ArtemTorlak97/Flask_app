@@ -1,3 +1,5 @@
+<!-- Latest compiled and minified CSS -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,17 +16,18 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href=" {{ url_for('index') }}">Flask</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-lg navbar- bg-light ">
+  <a href=" {{ url_for('index') }}" class="btn btn-link" role="button">Main</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       
       <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('posts.index') }}">Blog <span class="sr-only">(current)</span></a>
+        <a href="  {{ url_for('posts.index') }}" class="btn btn-link" role="button">Blog</a>
       </li>
 
       <li class="nav-item active">
@@ -35,27 +38,23 @@
         </li>
       </li>
 
-      <li class="nav-item active">
-        <li>
-        {% if not (current_user.has_role('admin') or current_user.has_role('user')) %} 
-          <a class="btn btn-default navbar-btn" href="/login">Sign in</a>
-         {% endif %}
-         </li>
-       </li>
-
-      <li class="nav-item active">
-        <li>
-          {% if current_user.has_role('admin')  %} 
-              <a class="btn btn-default navbar-btn" href="/logout">Log out</a>
-          {% endif %}
-          {% if current_user.has_role('user')  %} 
-              <a class="btn btn-default navbar-btn" href="/logout">Log out</a>
-          {% endif %}
-         </li>
-       </li>
 
     </ul>
-    
+
+
+        <li>
+          {% if not (current_user.has_role('admin') or current_user.has_role('user')) %} 
+                <a href="/register" class="btn btn-info" role="button">Registration</a>
+                <a href="/login"    class="btn btn-info" role="button">Log in</a>
+          {% endif %}
+          {% if current_user.has_role('admin') or current_user.has_role('user')%} 
+                <a href="/logout" class="btn btn-info" role="button">Log out</a>
+          {% endif %}
+
+
+        </li>
+
+
     
     <form class="form-inline my-2 my-lg-0" method = "GET">
 

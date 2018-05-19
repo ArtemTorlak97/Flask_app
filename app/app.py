@@ -24,12 +24,17 @@ from flask import flash
 
 from generate_token import generate_confirmation_token, confirm_token
 from flask_security import login_required
+from flask_login import LoginManager, current_user, login_user
+#from flask.ext.security.forms import LoginForm
+from forms import LoginForm
 from flask_mail import Message, Mail
 from my_email import send_email
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
 mail = Mail(app)
+
+login = LoginManager(app)
 
 def send_email(to, subject, template):
     
